@@ -6,9 +6,9 @@
 </template>
 
 <script>
-// NOTE: added alias in webpack configuration (why would somebody name the package xxxx.js)
-const WaveSurfer = require('wavesurfer')
-require('wavesurfer/dist/plugin/wavesurfer.timeline')
+import WaveSurfer from 'wavesurfer.js';
+import TimelinePlugin from 'wavesurfer.js/dist/plugin/wavesurfer.timeline.min.js';
+import RegionsPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.regions.min.js';
 
 export default {
   name: 'waveform',
@@ -18,28 +18,22 @@ export default {
       default: function () {
         return {
           container: '#waveform',
-          scrollParent: true
+          scrollParent: true,
+          plugins: [
+            TimelinePlugin.create({container: '#waveform-timeline'}),
+            RegionsPlugin.create()
+          ]
         }
       }
     }
   },
   data () {
     return {
-      wavesurfer: null
+      wavesurfer: null,
     }
   },
   mounted () {
     this.wavesurfer = WaveSurfer.create(this.options)
-    var wavesurfer = this.wavesurfer
-
-    this.wavesurfer.on('ready', function () {
-      var timeline = Object.create(WaveSurfer.Timeline)
-
-      timeline.init({
-        wavesurfer: wavesurfer,
-        container: '#waveform-timeline'
-      })
-    })
   }
 }
 </script>
